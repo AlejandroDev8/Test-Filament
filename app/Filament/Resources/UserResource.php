@@ -73,7 +73,7 @@ class UserResource extends Resource
                             ->preload()
                             ->live()
                             ->required(),
-                        Forms\Components\TextInput::make('addres')
+                        Forms\Components\TextInput::make('address')
                             ->required(),
                         Forms\Components\TextInput::make('postal_code')
                             ->required()
