@@ -42,6 +42,7 @@ class UserResource extends Resource
                             ->required(),
                         Forms\Components\TextInput::make('password')
                             ->password()
+                            ->hiddenOn('edit')
                             ->required(),
                     ]),
                 Section::make('Addres Information')
@@ -91,7 +92,23 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('country_id')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('state_id')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('city_id')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('address')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('postal_code')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
