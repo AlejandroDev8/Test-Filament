@@ -17,7 +17,11 @@ class CalendarResource extends Resource
 {
     protected static ?string $model = Calendar::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+
+    protected static ?string $navigationGroup = 'System Managmeent';
+
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
