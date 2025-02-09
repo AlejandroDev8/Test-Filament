@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,21 +18,31 @@ class HolidayResource extends Resource
 {
     protected static ?string $model = Holiday::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+
+    protected static ?string $navigationGroup = 'Employees Managmeent';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('calendar_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DatePicker::make('day')
+                Forms\Components\Select::make('user_id')
+                    ->relationship(name: 'user', titleAttribute: 'name')
                     ->required(),
-                Forms\Components\TextInput::make('type')
+                Forms\Components\Select::make('calendar_id')
+                    ->relationship(name: 'calendar', titleAttribute: 'name')
+                    ->required(),
+                Forms\Components\DatePicker::make('day')
+                    ->native(false)
+                    ->required(),
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'decline' => 'Decline',
+                        'approved' => 'Approved',
+                        'pending' => 'Pending',
+                    ])
                     ->required(),
             ]);
     }
@@ -40,16 +51,23 @@ class HolidayResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('user.name')
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('calendar_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('calendar.name')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('day')
+                    ->searchable()
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'decline' => 'danger',
+                        'pending' => 'warning',
+                        'approved' => 'success',
+                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -61,10 +79,16 @@ class HolidayResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('type')
+                    ->options([
+                        'decline' => 'Decline',
+                        'approved' => 'Approved',
+                        'pending' => 'Pending',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
