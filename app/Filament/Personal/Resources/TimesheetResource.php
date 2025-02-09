@@ -19,7 +19,7 @@ class TimesheetResource extends Resource
 {
     protected static ?string $model = Timesheet::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
     public static function getEloquentQuery(): Builder
     {
