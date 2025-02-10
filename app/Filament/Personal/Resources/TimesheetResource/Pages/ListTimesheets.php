@@ -60,6 +60,7 @@ class ListTimesheets extends ListRecords
                         ->title('Has entrado a trabajar')
                         ->body('Has comenzado a trabajar a las:' . Carbon::now())
                         ->color('success')
+                        ->icon('heroicon-o-clock')
                         ->success()
                         ->send();
                 }),
@@ -122,6 +123,7 @@ class ListTimesheets extends ListRecords
                         ->info()
                         ->send();
                 }),
+            Actions\CreateAction::make(),
             // Actions\CreateAction::make(),
             // ExcelImportAction::make()->color("primary")->use(MyTimesheetImport::class),
             // Action::make('createPDF')
