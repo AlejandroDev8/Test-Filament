@@ -39,11 +39,13 @@ class PersonalWidgetStats extends BaseWidget
             $startTime = Carbon::parse($timeSheet->day_in);
             $endTime = Carbon::parse($timeSheet->day_out);
 
-            $hours = $startTime->diffInHours($endTime);
+            $hours = $startTime->diffInSeconds($endTime);
             $sumHours += $hours;
         }
 
-        return $sumHours;
+        $timeFormat = gmdate('H:i:s', $sumHours);
+
+        return $timeFormat;
     }
 
     protected function getStats(): array
