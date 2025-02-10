@@ -23,7 +23,7 @@ class TimesheetResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', Auth::user()->id);
+        return parent::getEloquentQuery()->where('user_id', Auth::user()->id)->orderBy('id', 'desc');
     }
 
     public static function form(Form $form): Form
@@ -52,10 +52,6 @@ class TimesheetResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable()
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('calendar.name')
                     ->numeric()
                     ->searchable()
