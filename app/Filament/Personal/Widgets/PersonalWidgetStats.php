@@ -48,6 +48,25 @@ class PersonalWidgetStats extends BaseWidget
         return $timeFormat;
     }
 
+    protected function getTotalPause()
+    {
+        $timeSheets  = Timesheet::where('user_id', Auth::user()->id)
+            ->where('type', 'pause')->get();
+        $sumHours = 0;
+
+        foreach ($timeSheets as $timeSheet) {
+            $startTime = Carbon::parse($timeSheet->day_in);
+            $endTime = Carbon::parse($timeSheet->day_out);
+
+            $hours = $startTime->diffInSeconds($endTime);
+            $sumHours += $hours;
+        }
+
+        $timeFormat = gmdate('H:i:s', $sumHours);
+
+        return $timeFormat;
+    }
+
     protected function getStats(): array
     {
         return [
@@ -57,6 +76,8 @@ class PersonalWidgetStats extends BaseWidget
                 ->icon('heroicon-o-check-circle'),
             Stat::make('Total Work', $this->getTotalWork(Auth::user()))
                 ->icon('heroicon-o-calendar'),
+            Stat::make('Total Pause', $this->getTotalPause())
+                ->icon('heroicon-o-pause'),
         ];
     }
 }
